@@ -1,0 +1,120 @@
+.item-prices .individual-item {
+    width: 200px;
+    height: 100px;
+    background-color: #e5e5e5;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "item-icon right-side";
+}
+.item-icon { grid-area: item-icon; }
+
+.item-icon img {
+    padding: 10px;
+    max-width: 100px;
+    max-height: 80px;
+}
+
+.right-side { 
+    display: grid;
+    padding-right: 5px;
+    overflow: scroll;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "price-and-arrow" "gold-per-item-text" "standard-deviation" "lower-row";
+
+}
+
+
+
+.gold-per-item-text { 
+    grid-area: gold-per-item-text;
+    font-size: 8px;
+    color: #888;
+    text-align: right;
+}
+
+.standard-deviation { 
+    grid-area: standard-deviation;
+    color: #636363;
+    font-size: 8px;
+    text-align: right;
+}
+
+
+.other { grid-area: other; }
+
+.price-and-arrow { 
+    grid-area: price-and-arrow;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "arrow price";
+}
+.price, .arrow { 
+    font-size: 20px;
+}
+
+.price {
+    text-align: right;
+}
+
+.arrow { 
+    display: flex;
+    grid-area: arrow; 
+}
+.arrow.data-up::before {
+    content: "▲";
+    color: green;
+}
+.arrow.data-down::before {
+    content: "▼";
+    color: red;
+}
+
+
+.lower-row { 
+    grid-area: lower-row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "high-variation sell-or-buy";
+    font-size: 10px;
+}
+.high-variation {
+    grid-area: high-variation; 
+}
+
+.high-variation.data-high-variation::before { 
+    content:"●"
+}
+
+.high-variation.data-high-variation {
+    color: #ef8d22;
+}
+
+.sell-or-buy { 
+    grid-area: sell-or-buy; 
+    text-align: right;
+}
+
+.sell-or-buy.data-sell-recommended::before {
+    content: "SELL";
+    color: red;
+}
+.sell-or-buy.data-buy-recommended::before {
+    content:"BUY";
+    color: green;
+}
+.sell-or-buy.data-hold-recommended::before {
+    content:"HOLD";
+    color: gray;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-gap: 10px;
+    grid-auto-flow: dense;
+    list-style: none;
+}
