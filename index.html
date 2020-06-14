@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <main>
+        <div class="main-grid"></div>
+    </main>
+
+    <template id="single-item">
+        <div class="item-prices">
+            <div class="individual-item">
+                <div class="item-icon">icon</div>   
+                <div class="right-side">
+                    <div class="price-and-arrow">
+                        <div class="arrow"></div>
+                        <span class="price">10</span>
+                    </div>
+                    <div class="gold-per-item-text">Gold per item</div>
+                    <div class="standard-deviation">
+                        <span class="low"></span>-<span class="high"></span>
+                    </div>
+                    <div class="lower-row">
+                        <div class="high-variation"></div>
+                        <div class="sell-or-buy data-sell-recommended"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </template>
+
+    <script type="text/javascript">
+      // Client ID and API key from the Developer Console
+      var API_KEY = 'AIzaSyAUwzf9mOehZxNyhr1Kebd0qPVtaxZQ71k';
+
+      /**
+       * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+       */
+      function listMajors() {
+        fetch("https://content-sheets.googleapis.com/v4/spreadsheets/1sfcrSh-s74sgo0T4Zh4zojLl0hJMad2WqV3RYxp0Te4/values/A2%3AG"
+          + "?key=" + API_KEY
+        ).then(function(r) {
+          r.text().then(function(text) {
+            var range = JSON.parse(text)
+
+            if (range.values.length > 0) {
+              console.table(range.values)
+              for (i = 0; i < range.values.length; i++) {
+
+                var template = $('#single-item')[0];
+                var clone = $(template.content.cloneNode(true));
+
+                var row = range.values[i];
+
+                clone.find(".price").text(row[1])
+                let low_sd = (parseFloat(row[1]) - parseFloat(row[3])).toFixed(2)
+                let high_sd = (parseFloat(row[1]) + parseFloat(row[3])).toFixed(2)
+                clone.find(".standard-deviation .low").text(low_sd + "")
+                clone.find(".standard-deviation .high").text(high_sd + "")
+
+                if (row[2] === "Up") {
+                  clone.find(".arrow").addClass("data-up")
+                }
+                if (row[2] === "Down") {
+                  clone.find(".arrow").addClass("data-down")
+                }
+                if (row[4] === "SELL") {
+                  clone.find(".sell-or-buy").addClass("data-sell-recommended")
+                }
+                if (row[4] === "BUY") {
+                  clone.find(".sell-or-buy").addClass("data-buy-recommended")
+                }
+                if (row[4] === "HOLD") {
+                  clone.find(".sell-or-buy").addClass("data-hold-recommended")
+                }
+                if (row[5] === "Yes") {
+                  clone.find(".high-variation").addClass("data-high-variation")
+                }
+                let icon = row[6]
+                if (icon === "" || icon === undefined) {
+                  clone.find(".item-icon").text("No icon (" + row[0] + ")")
+                } else {
+                  clone.find(".item-icon").text("").append(
+                    $("<img/>")
+                      .attr("src", icon)
+                  )
+                }
+
+                $("main .main-grid").append(clone)
+
+                
+
+              }
+            } else {
+
+            }
+          })
+        })
+      }
+          
+      $().ready(listMajors)
+    </script>
+
+
+</body>
+</html>
